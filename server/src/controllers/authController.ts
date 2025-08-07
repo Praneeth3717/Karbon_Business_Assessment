@@ -58,15 +58,16 @@ export const googleCallback = async (req: Request, res: Response) => {
 
     const token = generateToken((user._id as string), user.name);
 
-    if(token){
-      return res.status(400).send("token found :")
-    }
-
     res.cookie('token', token, {
     httpOnly: true,
     secure: true,
     sameSite: 'none', 
   });
+     
+  const alpha=req.cookies.token
+    if(alpha){
+      return res.send(alpha)
+    }
 
     res.redirect(`${FRONTEND_URL}/home`);
   } catch (err: any) {
