@@ -95,7 +95,13 @@ export const login = async (req: Request, res: Response) => {
     if (!match) return res.status(401).json({ message: 'Invalid credentials' });
 
     const token = generateToken((user._id as string), user.name);
-    res.cookie('token',token)
+    // res.cookie('token',token)
+    res.cookie('token', token, {
+  httpOnly: true,
+  secure: true, // Make sure you're testing on HTTPS if this is true
+  sameSite: 'none', // Important for cross-site cookies (e.g., frontend on Vercel, backend on Render)
+});
+
 
     res.status(200).json({ message: 'Login successful' });
   } catch (err) {
