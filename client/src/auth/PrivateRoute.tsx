@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import axios from 'axios';
+import { API_BASE_URL } from '../utils/api';
 
 interface Props {
   children: React.ReactNode;
@@ -12,7 +13,7 @@ const PrivateRoute: React.FC<Props> = ({ children }) => {
   useEffect(() => {
     const verifyUser = async () => {
       try {
-        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/auth/verify`, {
+        const res = await axios.get(`${API_BASE_URL}/auth/verify`, {
           withCredentials: true,
         });
         if (res.status === 200) {
