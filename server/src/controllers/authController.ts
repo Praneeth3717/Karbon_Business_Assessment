@@ -58,13 +58,11 @@ export const googleCallback = async (req: Request, res: Response) => {
 
     const token = generateToken((user._id as string), user.name);
 
-    console.log('Generated JWT Token:', token);
-
     res.cookie('token', token, {
-  httpOnly: true,
-  secure: true,
-  sameSite: 'none', 
-});
+    httpOnly: true,
+    secure: true,
+    sameSite: 'none', 
+  });
 
     res.redirect(`${FRONTEND_URL}/home`);
   } catch (err: any) {

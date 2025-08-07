@@ -48,7 +48,6 @@ const googleCallback = async (req, res) => {
             user = await User_1.default.create({ googleId: sub, name, email });
         }
         const token = generateToken(user._id, user.name);
-        console.log('Generated JWT Token:', token);
         res.cookie('token', token, {
             httpOnly: true,
             secure: true,
