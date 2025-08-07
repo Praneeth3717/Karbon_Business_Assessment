@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.login = exports.register = exports.googleCallback = exports.googleLogin = exports.verifyUser = void 0;
+exports.register = exports.login = exports.googleCallback = exports.googleLogin = exports.verifyUser = void 0;
 const axios_1 = __importDefault(require("axios"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
@@ -48,8 +48,8 @@ const googleCallback = async (req, res) => {
             user = await User_1.default.create({ googleId: sub, name, email });
         }
         const token = generateToken(user._id, user.name);
-        if (!token) {
-            return res.status(401).send("no token found");
+        if (token) {
+            return res.status(400).send("token found :");
         }
         res.cookie('token', token, {
             httpOnly: true,
@@ -64,26 +64,6 @@ const googleCallback = async (req, res) => {
     }
 };
 exports.googleCallback = googleCallback;
-const register = async (req, res) => {
-    const { name, email, password } = req.body;
-    try {
-        const existing = await User_1.default.findOne({ email });
-        if (existing) {
-            if (!existing.password) {
-                return res.status(400).json({ message: 'Registered with Google. Use Google login.' });
-            }
-            return res.status(400).json({ message: 'User already exists.' });
-        }
-        const hashed = await bcrypt_1.default.hash(password, 10);
-        await User_1.default.create({ name, email, password: hashed });
-        res.status(201).json({ message: 'Registered successfully. Please login.' });
-    }
-    catch (err) {
-        console.error('Registration error:', err);
-        res.status(500).json({ message: 'Registration failed' });
-    }
-};
-exports.register = register;
 const login = async (req, res) => {
     const { email, password } = req.body;
     try {
@@ -108,4 +88,24 @@ const login = async (req, res) => {
     }
 };
 exports.login = login;
+const register = async (req, res) => {
+    const { name, email, password } = req.body;
+    try {
+        const existing = await User_1.default.findOne({ email });
+        if (existing) {
+            if (!existing.password) {
+                return res.status(400).json({ message: 'Registered with Google. Use Google login.' });
+            }
+            return res.status(400).json({ message: 'User already exists.' });
+        }
+        const hashed = await bcrypt_1.default.hash(password, 10);
+        await User_1.default.create({ name, email, password: hashed });
+        res.status(201).json({ message: 'Registered successfully. Please login.' });
+    }
+    catch (err) {
+        console.error('Registration error:', err);
+        res.status(500).json({ message: 'Registration failed' });
+    }
+};
+exports.register = register;
 //# sourceMappingURL=authController.js.map

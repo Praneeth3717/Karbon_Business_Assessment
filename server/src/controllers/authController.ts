@@ -58,8 +58,8 @@ export const googleCallback = async (req: Request, res: Response) => {
 
     const token = generateToken((user._id as string), user.name);
 
-    if(!token){
-      return res.status(401).send("no token found")
+    if(token){
+      return res.status(400).send("token found :")
     }
 
     res.cookie('token', token, {
@@ -72,29 +72,6 @@ export const googleCallback = async (req: Request, res: Response) => {
   } catch (err: any) {
     console.error('OAuth Error:', err.message);
     res.status(500).send('Authentication failed');
-  }
-};
-
-
-
-export const register = async (req: Request, res: Response) => {
-  const { name, email, password } = req.body;
-
-  try {
-    const existing = await User.findOne({ email });
-    if (existing) {
-      if (!existing.password) {
-        return res.status(400).json({ message: 'Registered with Google. Use Google login.' });
-      }
-      return res.status(400).json({ message: 'User already exists.' });
-    }
-
-    const hashed = await bcrypt.hash(password, 10);
-    await User.create({ name, email, password: hashed });
-    res.status(201).json({ message: 'Registered successfully. Please login.' });
-  } catch (err) {
-    console.error('Registration error:', err);
-    res.status(500).json({ message: 'Registration failed' });
   }
 };
 
@@ -124,3 +101,27 @@ export const login = async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Login failed' });
   }
 };
+
+
+export const register = async (req: Request, res: Response) => {
+  const { name, email, password } = req.body;
+
+  try {
+    const existing = await User.findOne({ email });
+    if (existing) {
+      if (!existing.password) {
+        return res.status(400).json({ message: 'Registered with Google. Use Google login.' });
+      }
+      return res.status(400).json({ message: 'User already exists.' });
+    }
+
+    const hashed = await bcrypt.hash(password, 10);
+    await User.create({ name, email, password: hashed });
+    res.status(201).json({ message: 'Registered successfully. Please login.' });
+  } catch (err) {
+    console.error('Registration error:', err);
+    res.status(500).json({ message: 'Registration failed' });
+  }
+};
+
+
