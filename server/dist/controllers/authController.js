@@ -8,11 +8,13 @@ const axios_1 = __importDefault(require("axios"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const User_1 = __importDefault(require("../models/User"));
+const urls_1 = require("../utils/urls");
 const generateToken = (userId, name) => {
     return jsonwebtoken_1.default.sign({ userId, name }, process.env.JWT_SECRET, { expiresIn: '1h' });
 };
 const googleLogin = (_req, res) => {
-    const redirectUri = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.GOOGLE_CLIENT_ID}&redirect_uri=http://localhost:5000/auth/google/callback&response_type=code&scope=openid%20email%20profile&access_type=offline&prompt=consent`;
+    // const redirectUri = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.GOOGLE_CLIENT_ID}&redirect_uri=http://localhost:5000/auth/google/callback&response_type=code&scope=openid%20email%20profile&access_type=offline&prompt=consent`;
+    const redirectUri = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.GOOGLE_CLIENT_ID}&redirect_uri=${urls_1.BACKEND_URL}/auth/google/callback&response_type=code&scope=openid%20email%20profile&access_type=offline&prompt=consent`;
     res.redirect(redirectUri);
 };
 exports.googleLogin = googleLogin;
@@ -24,7 +26,8 @@ const googleCallback = async (req, res) => {
                 code,
                 client_id: process.env.GOOGLE_CLIENT_ID,
                 client_secret: process.env.GOOGLE_CLIENT_SECRET,
-                redirect_uri: 'http://localhost:5000/auth/google/callback',
+                // redirect_uri: 'http://localhost:5000/auth/google/callback',
+                redirect_uri: `${urls_1.BACKEND_URL}/auth/google/callback`,
                 grant_type: 'authorization_code',
             },
         });
@@ -40,8 +43,14 @@ const googleCallback = async (req, res) => {
             user = await User_1.default.create({ googleId: sub, name, email });
         }
         const token = generateToken(user._id, user.name);
-        res.cookie('token', token);
-        res.redirect('http://localhost:5173/home');
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'none', // important for cross-domain cookies
+        });
+        // res.cookie('token',token)
+        // res.redirect('http://localhost:5173/home');
+        res.redirect(`${urls_1.FRONTEND_URL}/home`);
     }
     catch (err) {
         console.error('OAuth Error:', err.message);
@@ -80,7 +89,12 @@ const login = async (req, res) => {
         if (!match)
             return res.status(401).json({ message: 'Invalid credentials' });
         const token = generateToken(user._id, user.name);
-        res.cookie('token', token);
+        // res.cookie('token',token)
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: true, // Make sure you're testing on HTTPS if this is true
+            sameSite: 'lax', // Important for cross-site cookies (e.g., frontend on Vercel, backend on Render)
+        });
         res.status(200).json({ message: 'Login successful' });
     }
     catch (err) {
