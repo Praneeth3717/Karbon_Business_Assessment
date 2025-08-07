@@ -1,4 +1,6 @@
 "use strict";
+// import { Request, Response, NextFunction } from 'express';
+// import jwt from 'jsonwebtoken';
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -12,7 +14,8 @@ const verifyToken = (req, res, next) => {
     try {
         const decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET);
         req.userId = decoded.userId;
-        next();
+        req.name = decoded.name;
+        next(); // ✅ Proper middleware behavior
     }
     catch (err) {
         return res.status(403).json({ message: 'Invalid or expired token' });

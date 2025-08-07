@@ -9,6 +9,19 @@ const generateToken = (userId: string, name: string) => {
   return jwt.sign({ userId, name }, process.env.JWT_SECRET as string, { expiresIn: '1h' });
 };
 
+export interface AuthRequest extends Request {
+  userId?: string;
+  name?: string;
+}
+
+export const verifyUser = (req: AuthRequest, res: Response) => {
+  res.status(200).json({
+    userId: req.userId,
+    name: req.name,
+  });
+};
+
+
 export const googleLogin = (_req: Request, res: Response) => {
   // const redirectUri = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.GOOGLE_CLIENT_ID}&redirect_uri=http://localhost:5000/auth/google/callback&response_type=code&scope=openid%20email%20profile&access_type=offline&prompt=consent`;
   const redirectUri = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.GOOGLE_CLIENT_ID}&redirect_uri=${BACKEND_URL}/auth/google/callback&response_type=code&scope=openid%20email%20profile&access_type=offline&prompt=consent`;
@@ -60,6 +73,8 @@ export const googleCallback = async (req: Request, res: Response) => {
     res.status(500).send('Authentication failed');
   }
 };
+
+
 
 export const register = async (req: Request, res: Response) => {
   const { name, email, password } = req.body;

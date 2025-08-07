@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.login = exports.register = exports.googleCallback = exports.googleLogin = void 0;
+exports.login = exports.register = exports.googleCallback = exports.googleLogin = exports.verifyUser = void 0;
 const axios_1 = __importDefault(require("axios"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
@@ -12,6 +12,13 @@ const urls_1 = require("../utils/urls");
 const generateToken = (userId, name) => {
     return jsonwebtoken_1.default.sign({ userId, name }, process.env.JWT_SECRET, { expiresIn: '1h' });
 };
+const verifyUser = (req, res) => {
+    res.status(200).json({
+        userId: req.userId,
+        name: req.name,
+    });
+};
+exports.verifyUser = verifyUser;
 const googleLogin = (_req, res) => {
     // const redirectUri = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.GOOGLE_CLIENT_ID}&redirect_uri=http://localhost:5000/auth/google/callback&response_type=code&scope=openid%20email%20profile&access_type=offline&prompt=consent`;
     const redirectUri = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.GOOGLE_CLIENT_ID}&redirect_uri=${urls_1.BACKEND_URL}/auth/google/callback&response_type=code&scope=openid%20email%20profile&access_type=offline&prompt=consent`;
