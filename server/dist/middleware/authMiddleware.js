@@ -15,7 +15,7 @@ const verifyToken = (req, res, next) => {
         const decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET);
         req.userId = decoded.userId;
         req.name = decoded.name;
-        next(); // ✅ Proper middleware behavior
+        next();
     }
     catch (err) {
         return res.status(403).json({ message: 'Invalid or expired token' });

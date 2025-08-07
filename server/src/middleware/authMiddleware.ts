@@ -22,8 +22,6 @@
 
 
 // middleware/authMiddleware.ts
-
-// middleware/authMiddleware.ts
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
@@ -40,7 +38,7 @@ export const verifyToken = (req: AuthRequest, res: Response, next: NextFunction)
     const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as { userId: string; name: string };
     req.userId = decoded.userId;
     req.name = decoded.name;
-    next(); // ✅ Proper middleware behavior
+    next();
   } catch (err) {
     return res.status(403).json({ message: 'Invalid or expired token' });
   }
