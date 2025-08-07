@@ -22,7 +22,7 @@ connectDB(MONGO_URI).then(() => {
   });
 });
 
-app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
+app.use(cors({ origin: 'https://karbon-business-assessment.vercel.app/', credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 
