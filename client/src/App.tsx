@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Auth from './pages/Auth';
 import Home from './pages/Home';
-import PrivateRoute from './auth/PrivateRoute';
+// import PrivateRoute from './auth/PrivateRoute';
 
 const App = () => {
   return (
@@ -9,9 +9,9 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Auth />} />
         <Route path="/home" element={
-          <PrivateRoute>
+          // <PrivateRoute>
             <Home />
-          </PrivateRoute>
+          // </PrivateRoute>
           }/>
       </Routes>
     </Router>
