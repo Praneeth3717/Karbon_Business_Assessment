@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import notesRouter from './routes/notesRoutes';
 import authRouter from './routes/authRoutes';
 import connectDB from './config/db';
+import { FRONTEND_URL } from './utils/urls';
 
 dotenv.config();
 const app = express();
@@ -25,7 +26,7 @@ connectDB(MONGO_URI).then(() => {
 // app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
 
 app.use(cors({
-  origin: 'https://karbon-business-assessment.vercel.app', // or '*' ONLY for dev
+  origin: FRONTEND_URL, // or '*' ONLY for dev
   credentials: true
 }));
 
