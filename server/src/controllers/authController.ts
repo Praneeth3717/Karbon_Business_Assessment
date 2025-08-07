@@ -97,7 +97,7 @@ export const login = async (req: Request, res: Response) => {
     const token = generateToken((user._id as string), user.name);
     // res.cookie('token',token)
     res.cookie('token', token, {
-  httpOnly: true,
+  httpOnly: false,
   secure: true, // Make sure you're testing on HTTPS if this is true
   sameSite: 'none', // Important for cross-site cookies (e.g., frontend on Vercel, backend on Render)
 });

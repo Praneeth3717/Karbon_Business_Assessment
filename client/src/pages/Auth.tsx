@@ -27,6 +27,9 @@ const Auth: React.FC = () => {
     await api.post('/auth/login', {
       email: username,
       password,
+    },
+  {
+      withCredentials: true,
     });
 
     resetFields();
