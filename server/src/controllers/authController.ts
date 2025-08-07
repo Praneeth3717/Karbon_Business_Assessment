@@ -22,7 +22,7 @@ export const googleCallback = async (req: Request, res: Response) => {
         code,
         client_id: process.env.GOOGLE_CLIENT_ID,
         client_secret: process.env.GOOGLE_CLIENT_SECRET,
-        redirect_uri: 'http://localhost:5000/auth/google/callback',
+        redirect_uri: 'https://karbon-business-assessment.onrender.com/auth/google/callback',
         grant_type: 'authorization_code',
       },
     });
