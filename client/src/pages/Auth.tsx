@@ -62,10 +62,6 @@ const handleRegister = async () => {
   }
 };
 
-
-  // const handleSocialLogin = () => {
-  //   window.location.href = 'http://localhost:5000/auth/google/login';
-  // };
 const handleSocialLogin = () => {
   window.location.href = `${API_BASE_URL}/auth/google/login`;
 };

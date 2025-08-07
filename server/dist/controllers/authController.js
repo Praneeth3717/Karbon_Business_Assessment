@@ -48,6 +48,7 @@ const googleCallback = async (req, res) => {
             user = await User_1.default.create({ googleId: sub, name, email });
         }
         const token = generateToken(user._id, user.name);
+        console.log('Generated JWT Token:', token);
         res.cookie('token', token, {
             httpOnly: true,
             secure: true,
@@ -92,7 +93,6 @@ const login = async (req, res) => {
         if (!match)
             return res.status(401).json({ message: 'Invalid credentials' });
         const token = generateToken(user._id, user.name);
-        // res.cookie('token',token)
         res.cookie('token', token, {
             httpOnly: true,
             secure: true,
