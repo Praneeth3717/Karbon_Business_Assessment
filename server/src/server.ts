@@ -22,7 +22,19 @@ connectDB(MONGO_URI).then(() => {
   });
 });
 
-app.use(cors({ origin: 'https://karbon-business-assessment.vercel.app', credentials: true }));
+// app.use(cors({ origin: 'https://karbon-business-assessment.vercel.app', credentials: true }));
+// Update CORS configuration
+app.use(cors({ 
+  origin: [
+    'https://karbon-business-assessment.vercel.app',
+    'https://*.vercel.app'  // Allow all Vercel subdomains
+  ],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
+  exposedHeaders: ['Set-Cookie']
+}));
+
 app.use(express.json());
 app.use(cookieParser());
 

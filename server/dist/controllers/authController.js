@@ -40,7 +40,15 @@ const googleCallback = async (req, res) => {
             user = await User_1.default.create({ googleId: sub, name, email });
         }
         const token = generateToken(user._id, user.name);
-        res.cookie('token', token);
+        // res.cookie('token',token)
+        res.cookie('token', token, {
+            httpOnly: false, // Allow client-side access
+            secure: true, // HTTPS only in production
+            sameSite: 'none', // Required for cross-origin
+            domain: '.vercel.app', // Allow subdomains
+            maxAge: 3600000, // 1 hour in milliseconds
+            path: '/' // Available on all paths
+        });
         res.redirect('https://karbon-business-assessment.vercel.app/home');
     }
     catch (err) {
@@ -80,7 +88,15 @@ const login = async (req, res) => {
         if (!match)
             return res.status(401).json({ message: 'Invalid credentials' });
         const token = generateToken(user._id, user.name);
-        res.cookie('token', token);
+        // res.cookie('token',token)
+        res.cookie('token', token, {
+            httpOnly: false, // Allow client-side access
+            secure: true, // HTTPS only in production
+            sameSite: 'none', // Required for cross-origin
+            domain: '.vercel.app', // Allow subdomains
+            maxAge: 3600000, // 1 hour in milliseconds
+            path: '/' // Available on all paths
+        });
         res.status(200).json({ message: 'Login successful' });
     }
     catch (err) {
