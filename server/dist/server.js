@@ -24,7 +24,6 @@ if (!MONGO_URI) {
         console.log(`Server running `);
     });
 });
-// app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
 app.use((0, cookie_parser_1.default)());
 app.use((0, cors_1.default)({
     origin: urls_1.FRONTEND_URL,
