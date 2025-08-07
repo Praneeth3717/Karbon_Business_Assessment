@@ -44,7 +44,7 @@ export const googleCallback = async (req: Request, res: Response) => {
 
     const token = generateToken((user._id as string), user.name);
     res.cookie('token',token)
-    res.redirect('http://localhost:5173/home');
+    res.redirect('https://karbon-business-assessment.vercel.app/home');
   } catch (err: any) {
     console.error('OAuth Error:', err.message);
     res.status(500).send('Authentication failed');
