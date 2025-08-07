@@ -1,0 +1,35 @@
+// {
+//   "compilerOptions": {
+//     "target": "ES2020",               // Compatible with modern Node.js
+//     "module": "CommonJS",             // Default for Node.js require-style imports
+//     "rootDir": "./src",               // Source .ts files
+//     "outDir": "./dist",               // Compiled .js files
+//     "esModuleInterop": true,          // Allow default imports from CommonJS
+//     "moduleResolution": "node",       // Mimics Node.js resolution
+//     "resolveJsonModule": true,        // Allow importing .json files
+//     "strict": true,                   // Strict type-checking
+//     "skipLibCheck": true,             // Skip checking `.d.ts` files (faster)
+//     "forceConsistentCasingInFileNames": true,
+//     "sourceMap": true                 // Optional: Useful for debugging
+//   },
+//   "include": ["src"],                 // All TS files inside /src
+//   "exclude": ["node_modules", "dist"]
+// }
+
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "CommonJS",
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "sourceMap": true,
+    "typeRoots": ["./node_modules/@types", "./src/types"]
+  },
+  "include": ["src"]
+}
