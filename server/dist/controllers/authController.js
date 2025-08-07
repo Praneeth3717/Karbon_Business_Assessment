@@ -97,7 +97,11 @@ const login = async (req, res) => {
             return res.status(401).json({ message: 'Invalid credentials' });
         const token = generateToken(user._id, user.name);
         // res.cookie('token',token)
-        res.cookie('token', token);
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'none'
+        });
         res.status(200).json({ message: 'Login successful' });
     }
     catch (err) {
