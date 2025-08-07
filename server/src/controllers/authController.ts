@@ -58,6 +58,10 @@ export const googleCallback = async (req: Request, res: Response) => {
 
     const token = generateToken((user._id as string), user.name);
 
+    if(!token){
+      return res.status(401).send("no token found")
+    }
+
     res.cookie('token', token, {
     httpOnly: true,
     secure: true,

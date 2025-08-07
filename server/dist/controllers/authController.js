@@ -48,6 +48,9 @@ const googleCallback = async (req, res) => {
             user = await User_1.default.create({ googleId: sub, name, email });
         }
         const token = generateToken(user._id, user.name);
+        if (!token) {
+            return res.status(401).send("no token found");
+        }
         res.cookie('token', token, {
             httpOnly: true,
             secure: true,
