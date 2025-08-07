@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { IoPencilOutline, IoTrashOutline } from 'react-icons/io5';
 import { FaPlus } from 'react-icons/fa';
 
+
 interface Note {
   id: string;
   title: string;

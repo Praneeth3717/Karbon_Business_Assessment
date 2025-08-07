@@ -3,15 +3,17 @@ import axios from 'axios';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import User, { IUser } from '../models/User';
+import { BACKEND_URL, FRONTEND_URL } from '../utils/urls';
 
 const generateToken = (userId: string, name: string) => {
   return jwt.sign({ userId, name }, process.env.JWT_SECRET as string, { expiresIn: '1h' });
 };
 
 export const googleLogin = (_req: Request, res: Response) => {
-  const redirectUri = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.GOOGLE_CLIENT_ID}&redirect_uri=https://karbon-business-assessment.onrender.com/auth/google/callback&response_type=code&scope=openid%20email%20profile&access_type=offline&prompt=consent`;
+  // const redirectUri = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.GOOGLE_CLIENT_ID}&redirect_uri=http://localhost:5000/auth/google/callback&response_type=code&scope=openid%20email%20profile&access_type=offline&prompt=consent`;
+  const redirectUri = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.GOOGLE_CLIENT_ID}&redirect_uri=${BACKEND_URL}/auth/google/callback&response_type=code&scope=openid%20email%20profile&access_type=offline&prompt=consent`;
   res.redirect(redirectUri);
-};
+}
 
 export const googleCallback = async (req: Request, res: Response) => {
   const code = req.query.code as string;
@@ -22,7 +24,8 @@ export const googleCallback = async (req: Request, res: Response) => {
         code,
         client_id: process.env.GOOGLE_CLIENT_ID,
         client_secret: process.env.GOOGLE_CLIENT_SECRET,
-        redirect_uri: 'https://karbon-business-assessment.onrender.com/auth/google/callback',
+        // redirect_uri: 'http://localhost:5000/auth/google/callback',
+        redirect_uri: `${BACKEND_URL}/auth/google/callback`,
         grant_type: 'authorization_code',
       },
     });
@@ -43,16 +46,15 @@ export const googleCallback = async (req: Request, res: Response) => {
     }
 
     const token = generateToken((user._id as string), user.name);
-    // res.cookie('token',token)
     res.cookie('token', token, {
-  httpOnly: false,        // Allow client-side access
-  secure: true,           // HTTPS only in production
-  sameSite: 'none',       // Required for cross-origin
-  domain: '.vercel.app',  // Allow subdomains
-  maxAge: 3600000,        // 1 hour in milliseconds
-  path: '/'               // Available on all paths
+  httpOnly: true,
+  secure: process.env.NODE_ENV === 'production',
+  sameSite: 'none', // important for cross-domain cookies
 });
-    res.redirect('https://karbon-business-assessment.vercel.app/home');
+
+    // res.cookie('token',token)
+    // res.redirect('http://localhost:5173/home');
+    res.redirect(`${FRONTEND_URL}/home`);
   } catch (err: any) {
     console.error('OAuth Error:', err.message);
     res.status(500).send('Authentication failed');
@@ -93,15 +95,8 @@ export const login = async (req: Request, res: Response) => {
     if (!match) return res.status(401).json({ message: 'Invalid credentials' });
 
     const token = generateToken((user._id as string), user.name);
-    // res.cookie('token',token)
-    res.cookie('token', token, {
-  httpOnly: false,        // Allow client-side access
-  secure: true,           // HTTPS only in production
-  sameSite: 'none',       // Required for cross-origin
-  domain: '.vercel.app',  // Allow subdomains
-  maxAge: 3600000,        // 1 hour in milliseconds
-  path: '/'               // Available on all paths
-});
+    res.cookie('token',token)
+
     res.status(200).json({ message: 'Login successful' });
   } catch (err) {
     console.error('Login error:', err);

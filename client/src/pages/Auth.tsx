@@ -3,6 +3,7 @@ import { FcGoogle } from 'react-icons/fc';
 import api from '../utils/api';
 import { useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
+import  {API_BASE_URL}  from '../utils/api';
 
 
 const Auth: React.FC = () => {
@@ -59,9 +60,12 @@ const handleRegister = async () => {
 };
 
 
-  const handleSocialLogin = () => {
-    window.location.href = 'https://karbon-business-assessment.onrender.com/auth/google/login';
-  };
+  // const handleSocialLogin = () => {
+  //   window.location.href = 'http://localhost:5000/auth/google/login';
+  // };
+const handleSocialLogin = () => {
+  window.location.href = `${API_BASE_URL}/auth/google/login`;
+};
 
   return (
     <div

@@ -23,18 +23,7 @@ if (!MONGO_URI) {
         console.log(`Server running at http://localhost:${PORT}`);
     });
 });
-// app.use(cors({ origin: 'https://karbon-business-assessment.vercel.app', credentials: true }));
-// Update CORS configuration
-app.use((0, cors_1.default)({
-    origin: [
-        'https://karbon-business-assessment.vercel.app',
-        'https://*.vercel.app' // Allow all Vercel subdomains
-    ],
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
-    exposedHeaders: ['Set-Cookie']
-}));
+app.use((0, cors_1.default)({ origin: 'http://localhost:5173', credentials: true }));
 app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
 app.use('/auth', authRoutes_1.default);
