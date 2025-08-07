@@ -12,7 +12,7 @@ const generateToken = (userId, name) => {
     return jsonwebtoken_1.default.sign({ userId, name }, process.env.JWT_SECRET, { expiresIn: '1h' });
 };
 const googleLogin = (_req, res) => {
-    const redirectUri = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.GOOGLE_CLIENT_ID}&redirect_uri=http://localhost:5000/auth/google/callback&response_type=code&scope=openid%20email%20profile&access_type=offline&prompt=consent`;
+    const redirectUri = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.GOOGLE_CLIENT_ID}&redirect_uri=https://karbon-business-assessment.onrender.com/auth/google/callback&response_type=code&scope=openid%20email%20profile&access_type=offline&prompt=consent`;
     res.redirect(redirectUri);
 };
 exports.googleLogin = googleLogin;
@@ -24,7 +24,7 @@ const googleCallback = async (req, res) => {
                 code,
                 client_id: process.env.GOOGLE_CLIENT_ID,
                 client_secret: process.env.GOOGLE_CLIENT_SECRET,
-                redirect_uri: 'http://localhost:5000/auth/google/callback',
+                redirect_uri: 'https://karbon-business-assessment.onrender.com/auth/google/callback',
                 grant_type: 'authorization_code',
             },
         });
@@ -41,7 +41,7 @@ const googleCallback = async (req, res) => {
         }
         const token = generateToken(user._id, user.name);
         res.cookie('token', token);
-        res.redirect('http://localhost:5173/home');
+        res.redirect('https://karbon-business-assessment.vercel.app/home');
     }
     catch (err) {
         console.error('OAuth Error:', err.message);

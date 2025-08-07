@@ -60,7 +60,7 @@ const handleRegister = async () => {
 
 
   const handleSocialLogin = () => {
-    window.location.href = 'http://localhost:5000/auth/google/login';
+    window.location.href = 'https://karbon-business-assessment.onrender.com/auth/google/login';
   };
 
   return (
