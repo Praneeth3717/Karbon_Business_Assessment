@@ -70,7 +70,7 @@ export const googleCallback = async (req: Request, res: Response) => {
   return res.status(200).json({ token: alpha });
 }
 
-    res.redirect(`${FRONTEND_URL}/home`);
+    res.redirect(`/home`);
   } catch (err: any) {
     console.error('OAuth Error:', err.message);
     res.status(500).send('Authentication failed');
