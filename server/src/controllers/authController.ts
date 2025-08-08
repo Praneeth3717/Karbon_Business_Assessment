@@ -63,12 +63,6 @@ export const googleCallback = async (req: Request, res: Response) => {
     secure: true,
     sameSite: 'none', 
   });
-     
-  const alpha=req.cookies.token
-
-  if (alpha) {
-  return res.status(200).json({ token: alpha });
-}
 
     res.redirect(`/home`);
   } catch (err: any) {
